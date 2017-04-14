@@ -29,20 +29,16 @@ zip packages: protoc-$VERSION-$PLATFORM.zip. It contains the protoc binary
 as well as a set of standard .proto files distributed along with protobuf.  
 
 
-If you are looking for an old version that is not available in the release
-page, check out the maven repo here:
+如果release页面没有要下载的旧版本，请在这个仓库查找：
 
   [http://repo1.maven.org/maven2/com/google/protobuf/protoc/](http://repo1.maven.org/maven2/com/google/protobuf/protoc/)
 
-These pre-built binaries are only provided for released versions. If you want
-to use the github master version at HEAD, or you need to modify protobuf code,
-or you are using C++, it's recommended to build your own protoc binary from
-source.
+预生成的二进制文档只有已发行版本可用。如果读者希望使用github上主分支的版本，或者希望修改protobuf代码，或者读者使用的是C++编程语言，我们都建议读者从源代码中构建并生成自己的protoc二进制文件。
 
-If you would like to build protoc binary from source, see the [C++ Installation
-Instructions](src/README.md).
+如果读者希望从源代码中构建protoc二进制文件，请看[C++ Installation
+Instructions](src/README.md). 
 
-Protobuf Runtime Installation
+Protobuf运行环境安装
 -----------------------------
 
 Protobuf supports several different programming languages. For each programming
