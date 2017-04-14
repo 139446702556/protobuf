@@ -1,38 +1,33 @@
-Protocol Buffers - Google's data interchange format
+Protocol Buffers - 谷歌数据交换格式
 ===================================================
 
 [![Build Status](https://travis-ci.org/google/protobuf.svg?branch=master)](https://travis-ci.org/google/protobuf) [![Build status](https://ci.appveyor.com/api/projects/status/73ctee6ua4w2ruin?svg=true)](https://ci.appveyor.com/project/protobuf/protobuf) [![Build Status](https://grpc-testing.appspot.com/buildStatus/icon?job=protobuf_branch)](https://grpc-testing.appspot.com/job/protobuf_branch) [![Build Status](https://grpc-testing.appspot.com/job/protobuf_branch_32/badge/icon)](https://grpc-testing.appspot.com/job/protobuf_branch_32) [![Build Status](http://ci.bazel.io/buildStatus/icon?job=protobuf)](http://ci.bazel.io/job/protobuf/)
 
-Copyright 2008 Google Inc.
+版权所有@谷歌 2008
 
-https://developers.google.com/protocol-buffers/
+谷歌Protocol Buffers开发者指导：https://developers.google.com/protocol-buffers/
 
-Overview
+概述
 --------
+ 
+Protocol BUffers（也被简称为protobuf）是谷歌公司不依赖于具体语言、平台的，且可拓展的结构数据序列化机制。  
+具体请参阅[谷歌开发者网站-protobuf文档](https://developers.google.com/protocol-buffers/)。  
 
-Protocol Buffers (a.k.a., protobuf) are Google's language-neutral,
-platform-neutral, extensible mechanism for serializing structured data. You
-can find [protobuf's documentation on the Google Developers site](https://developers.google.com/protocol-buffers/).
+此README文档包括protobuf安装指引。为了安装protobuf，需要首先安装protocol编译器（用于编译.proto文件）和所选变成编程语言的protobuf运行环境。
 
-This README file contains protobuf installation instructions. To install
-protobuf, you need to install the protocol compiler (used to compile .proto
-files) and the protobuf runtime for your chosen programming language.
-
-Protocol Compiler Installation
+Protocol编译器安装
 ------------------------------
+  
+Protocol编译器使用C++语言编写，如果读者使用C++作为开发语言，那么请按[C++安装指引](src/README.md)的方式以C++运行环境单独安装protoc。
 
-The protocol compiler is written in C++. If you are using C++, please follow
-the [C++ Installation Instructions](src/README.md) to install protoc along
-with the C++ runtime.
+而对于非C++开发者来说，最简单的protocol编译器安装方法是在以下发行页下载预构建过的二进制程序：
 
-For non-C++ users, the simplest way to install the protocol compiler is to
-download a pre-built binary from our release page:
-
-  [https://github.com/google/protobuf/releases](https://github.com/google/protobuf/releases)
+[https://github.com/google/protobuf/releases](https://github.com/google/protobuf/releases)  
 
 In the downloads section of each release, you can find pre-built binaries in
 zip packages: protoc-$VERSION-$PLATFORM.zip. It contains the protoc binary
-as well as a set of standard .proto files distributed along with protobuf.
+as well as a set of standard .proto files distributed along with protobuf.  
+
 
 If you are looking for an old version that is not available in the release
 page, check out the maven repo here:
