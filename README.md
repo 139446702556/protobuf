@@ -23,10 +23,8 @@ Protocol编译器使用C++语言编写，如果读者使用C++作为开发语言
 而对于非C++开发者来说，最简单的protocol编译器安装方法是在以下发行页下载预构建过的二进制程序：
 
 [https://github.com/google/protobuf/releases](https://github.com/google/protobuf/releases)  
-
-In the downloads section of each release, you can find pre-built binaries in
-zip packages: protoc-$VERSION-$PLATFORM.zip. It contains the protoc binary
-as well as a set of standard .proto files distributed along with protobuf.  
+ 
+每个发行版的下载模块，都可以在zip包中找到预生成的二进制文件：proto-$VERSION-$PLATFORM.zip。其中包括大量的.proto文件和protoc二进制文件。
 
 
 如果release页面没有要下载的旧版本，请在这个仓库查找：
@@ -41,9 +39,7 @@ Instructions](src/README.md).
 Protobuf运行环境安装
 -----------------------------
 
-Protobuf supports several different programming languages. For each programming
-language, you can find instructions in the corresponding source directory about
-how to install protobuf runtime for that specific language:
+Protobuf支持多种编程语言。每种编程语言都可以在相应的源代码目录中找到运行环境安装方法：
 
 | Language                             | Source                                                |
 |--------------------------------------|-------------------------------------------------------|
@@ -59,10 +55,9 @@ how to install protobuf runtime for that specific language:
 | PHP                                  | [php](php)                                            |
 
 
-Usage
+用法
 -----
 
-The complete documentation for Protocol Buffers is available via the
-web at:
+通过以下链接可以找到Protocol Buffers完整的文档：
 
     https://developers.google.com/protocol-buffers/
