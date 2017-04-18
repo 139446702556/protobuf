@@ -3,6 +3,8 @@ Protocol Buffers - 谷歌数据交换格式
 
 [![Build Status](https://travis-ci.org/google/protobuf.svg?branch=master)](https://travis-ci.org/google/protobuf) [![Build status](https://ci.appveyor.com/api/projects/status/73ctee6ua4w2ruin?svg=true)](https://ci.appveyor.com/project/protobuf/protobuf) [![Build Status](https://grpc-testing.appspot.com/buildStatus/icon?job=protobuf_branch)](https://grpc-testing.appspot.com/job/protobuf_branch) [![Build Status](https://grpc-testing.appspot.com/job/protobuf_branch_32/badge/icon)](https://grpc-testing.appspot.com/job/protobuf_branch_32) [![Build Status](http://ci.bazel.io/buildStatus/icon?job=protobuf)](http://ci.bazel.io/job/protobuf/)
 
+## [开发者文档中文版](https://github.com/mrlitong/protobuf/tree/master/docs) ##
+
 版权所有@谷歌 2008
 
 谷歌Protocol Buffers开发者指导：https://developers.google.com/protocol-buffers/
