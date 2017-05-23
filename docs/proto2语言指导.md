@@ -131,4 +131,20 @@
 
 定义消息类型时，有些情况下我们可能希望一个字段有多个指定的值，举例来说，往`SearchRequest`中添加一个`corpus`字段，它的值可以是`UNIVERSAL`,`WEB`,`IMAGES`,`LOCAL`,`NEWS`,`PRODUCTS`或者是`VIDEO`。通过`enum`关键字可以很方便地完成这一点-由`enum`限定的字段的值只可以被指定为enum结构体内的常量之一（其它赋值操作将被解析器归为未知字段）。下面的例子中添加了一个名为`Corpus`的枚举字段。
 
-
+```C++
+message SearchRequest {
+  required string query = 1;
+  optional int32 page_number = 2;
+  optional int32 result_per_page = 3 [default = 10];
+  enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+  }
+  optional Corpus corpus = 4 [default = UNIVERSAL];
+}
+```
