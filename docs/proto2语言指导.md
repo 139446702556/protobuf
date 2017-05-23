@@ -148,3 +148,19 @@ message SearchRequest {
   optional Corpus corpus = 4 [default = UNIVERSAL];
 }
 ```
+我们还可以通过为不同的枚举常量分配相同的值来定义别名。要这么做就必须设置`allow_alias`选项为true，否则protocol编译器将生成一条错误警告。
+
+```C++
+enum EnumAllowingAlias {
+  option allow_alias = true;
+  UNKNOWN = 0;
+  STARTED = 1;
+  RUNNING = 1;
+}
+enum EnumNotAllowingAlias {
+  UNKNOWN = 0;
+  STARTED = 1;
+  // RUNNING = 1;  // Uncommenting this line will cause a compile error inside Google and a warning message outside.
+}
+```
+
