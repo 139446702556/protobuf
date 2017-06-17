@@ -170,3 +170,57 @@ enum EnumNotAllowingAlias {
 
 关于如何在应用程序中使用枚举，请参考[generated code guide]()。
 
+## 其它消息类型
+
+消息类型也可以作为字段值使用。比如，在`SearchResponse`中可以包括`Result`，如果这么做的话，我们可以在同一个`.proto`文件中定义`Result`，并且在`SearchResponse`中指定它：
+
+```C++
+message SearchResponse {
+  repeated Result result = 1;
+}
+
+message Result {
+  required string url = 1;
+  optional string title = 2;
+  repeated string snippets = 3;
+}
+```
+
+### 导入定义
+
+在上面的例子中，`Result`和`SearchResponse`定义在同一个文件中，但是您是否考虑过，如果你想要定义的那个字段类型已经在其它`.proto`文件中被定义了呢？  
+
+通过导入命令可以轻易地从其它`.proto`文件中使用已被定义的类型，为了使用导入命令，需要在被导入文件的最上面添加一条导入声明：
+
+```C++
+import "myproject/other_protos.proto";
+````
+
+默认情况下，具有上述声明的文件才可以直接引用定义。但有些情况下，我们可能需要把这个`.proto`文件移动到其它位置。除了直接移动`.proto`文件并且更新所有引用此文件的声明外，现在我们可以直接使用虚拟导入命令来将重定向到新位置。
+
+```C++
+// new.proto
+// All definitions are moved here
+```
+
+```C++
+// old.proto
+// This is the proto that all clients are importing.
+import public "new.proto";
+import "other.proto";
+```
+
+```C++
+// client.proto
+import "old.proto";
+// You use definitions from old.proto and new.proto, but not other.proto
+```
+
+使用`-I / --proto_path` flag 命令可以使用protocol编译器从指定的目录集中查找指定的导入文件。如果不指定flag，那么编译器就会在被调用的目录中查找。一般情况下，有必要设置`--proto_path`flag为根目录，并且所有导入使用绝对路径。  
+
+### 使用proto3消息类型
+
+在proto2消息中导入proto3消息是完全可能的，反之亦然。但是proto2的枚举不可用于proto3语法。
+
+## 嵌套类型
+
