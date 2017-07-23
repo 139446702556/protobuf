@@ -247,3 +247,47 @@ message SearchResponse {
 }
 ```
 
+如果希望在其它消息类型中使用`Result`的话，只需要像引用结构体或者对象中的成员变量那样，使用`Parent.Type`的方式即可，如下：
+
+```protobuf
+message SomeOtherMessage{
+  optional SearchResponse.Result result = 1;
+}
+```
+
+同样的，只要你喜欢，也可以嵌套任意深的层数：
+
+```protobuf
+message Outer {                  // Level 0
+  message MiddleAA {  // Level 1
+    message Inner {   // Level 2
+      required int64 ival = 1;
+      optional bool  booly = 2;
+    }
+  }
+  message MiddleBB {  // Level 1
+    message Inner {   // Level 2
+      required int32 ival = 1;
+      optional bool  booly = 2;
+    }
+  }
+}
+```
+
+### 关键字Groups
+
+**请注意这个关键字已经被弃用，在创建新的消息类型时，应该使用嵌套消息类型，而不是Groups。**
+
+Groups和嵌套消息类型类似，也是用于创建嵌套消息类型。例如，我们用另一种方式实现上面的`SearchResponse`：
+
+```protobuf
+message SearchResponse {
+  repeated group Result = 1 {
+    required string url = 2;
+    optional string title = 3;
+    repeated string snippets = 4;
+  }
+}
+```
+
+Groups只是简单地将几个字段和一个消息类型组合为一个单独的声明。在实际代码中，完全可以认为`Result`中包含有`result`字段。（后者命名只是为了与前者区分，避免命名冲突。）因此，这种定义嵌套消息的方式与上面讨论过的另一种方式是完全一样的。
