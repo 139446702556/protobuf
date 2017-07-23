@@ -24,12 +24,14 @@
 
 首先来看一个非常简单的例子。假设要定义一个查询请求格式的消息，包括一个查询字符串，所查询的感兴趣页面，每一页中符合查询要求的结果数。下面是下面是代码：  
 
+```protobuf
     message SearchRequest{
     	required string query = 1;
     	optional int32 page_number = 2;
     	optional int32 result_per_page = 3;
-    }  
-    
+    }
+```
+
 `SearchRequest`消息的定义指明了三个字段（键/值对），我们希望获得的数据就包含在这样类型的消息中。每个字段都有一个名字和一个类型。
 
 ### 指明字段类型
@@ -50,7 +52,9 @@
 
 因为历史性的原因，标量数字类型的`repeated`字段的编码效率并不如想象中的那样好。在今后的代码中应该使用特殊的选项`[packed=true]`来更高效地编码。比如：
 
+```protobuf
     repeated int32 samples = 4 [packed=true];
+```
 
 在[Protocol Buffer编码]()中可以获取更多有关于`packed`的信息。
 
@@ -60,6 +64,7 @@
 
 在一个`.proto`文件中可以定义多个消息类型。这是很有用的，比如说当我们想针对`SearchRequest`做出回应的时候，可以定义一个`SearchResponse`消息类型，可以在`.proto`文件中这么写：
 
+```protobuf
     message SearchRequest {
       required string query = 1;
       optional int32 page_number = 2;
@@ -69,25 +74,30 @@
     message SearchResponse {
      ...
     }
+```
 
 ### 添加注释
 
 使用C/C++风格的写法来添加注释。
 
+```protobuf
     message SearchRequest {
       required string query = 1;
       optional int32 page_number = 2;// Which page number do we want?
       optional int32 result_per_page = 3;// Number of results to return per page.
     }
+```
 
 ### 保留字段
 
 如果通过删除或注释整个字段的方式来更新一个消息类型的话，此代码的下一任开发者在创建其它的消息类型时，可以重新使用标签。但是当加载相同的`.proto`的旧版本时将导致一些问题，包括数据冲突，潜在BUG，等等。Json解析同样存在这样的问题，一个确保避免此问题的方法是指定你所删除的字段为`reserved`。如果下一任开发者尝试使用这些字段时，protocol buffer编译器将给出警告。
 
+```protobuf
     message Foo {
       reserved 2, 15, 9 to 11;
       reserved "foo", "bar";
     }
+```
 
 请注意，不要在同一个保留字段声明中混淆字段名和标签序号。
 
@@ -131,7 +141,7 @@
 
 定义消息类型时，有些情况下我们可能希望一个字段有多个指定的值，举例来说，往`SearchRequest`中添加一个`corpus`字段，它的值可以是`UNIVERSAL`,`WEB`,`IMAGES`,`LOCAL`,`NEWS`,`PRODUCTS`或者是`VIDEO`。通过`enum`关键字可以很方便地完成这一点-由`enum`限定的字段的值只可以被指定为enum结构体内的常量之一（其它赋值操作将被解析器归为未知字段）。下面的例子中添加了一个名为`Corpus`的枚举字段。
 
-```C++
+```protobuf
 message SearchRequest {
   required string query = 1;
   optional int32 page_number = 2;
@@ -150,7 +160,7 @@ message SearchRequest {
 ```
 我们还可以通过为不同的枚举常量分配相同的值来定义别名。要这么做就必须设置`allow_alias`选项为true，否则protocol编译器将生成一条错误警告。
 
-```C++
+```protobuf
 enum EnumAllowingAlias {
   option allow_alias = true;
   UNKNOWN = 0;
@@ -174,7 +184,7 @@ enum EnumNotAllowingAlias {
 
 消息类型也可以作为字段值使用。比如，在`SearchResponse`中可以包括`Result`，如果这么做的话，我们可以在同一个`.proto`文件中定义`Result`，并且在`SearchResponse`中指定它：
 
-```C++
+```protobuf
 message SearchResponse {
   repeated Result result = 1;
 }
@@ -192,25 +202,25 @@ message Result {
 
 通过导入命令可以轻易地从其它`.proto`文件中使用已被定义的类型，为了使用导入命令，需要在被导入文件的最上面添加一条导入声明：
 
-```C++
+```protobuf
 import "myproject/other_protos.proto";
 ````
 
 默认情况下，具有上述声明的文件才可以直接引用定义。但有些情况下，我们可能需要把这个`.proto`文件移动到其它位置。除了直接移动`.proto`文件并且更新所有引用此文件的声明外，现在我们可以直接使用虚拟导入命令来将重定向到新位置。
 
-```C++
+```protobuf
 // new.proto
 // All definitions are moved here
 ```
 
-```C++
+```protobuf
 // old.proto
 // This is the proto that all clients are importing.
 import public "new.proto";
 import "other.proto";
 ```
 
-```C++
+```protobuf
 // client.proto
 import "old.proto";
 // You use definitions from old.proto and new.proto, but not other.proto
@@ -223,4 +233,17 @@ import "old.proto";
 在proto2消息中导入proto3消息是完全可能的，反之亦然。但是proto2的枚举不可用于proto3语法。
 
 ## 嵌套类型
+
+我们还可以在其它消息类型中嵌套定义消息类型，在下面的示例中，`ResultResponse`中定义了`Result`：
+
+```protobuf
+message SearchResponse {
+  message Result {
+    required string url = 1;
+    optional string title = 2;
+    repeated string snippets = 3;
+  }
+  repeated Result result = 1;
+}
+```
 
