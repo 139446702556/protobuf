@@ -343,3 +343,70 @@ foo.SetExtension(bar, 15);
 同样地，`Foo`类定义了模板访问器：`HasExtension()`，`ClearExtension()`，`GetExtension()`，`MutableExtension()`，以及`AddExtension()`。所有的语义都与正常字段的相应生成的访问器匹配。要想了解更多有关extensions的使用。请参考所选编程语言的参考。
 
 请注意，extensions可以是任何字段类型，包括消息类型本身，但却不能作为`oneofs`或者`maps`。
+
+
+### Nested Extensions 嵌套拓展
+
+我们可以在另一个类型中声明拓展：
+
+```protobuf
+message Baz {
+  extend Foo {
+    optional int32 bar = 126;
+  }
+  ...
+}
+```
+
+在这个例子中，使用C++访问此拓展的方式是：
+
+```protobuf
+Foo foo;
+foo.SetExtension(Baz::bar,15);
+```
+
+换句话说，唯一的不同是`bar`定义在`Bar`的中。
+
+**这是一个非常常见的混淆：在消息类型中声明嵌套的拓展并不意味着`Foo`和`Bar`有任何关系。尤其是`Bar`并不是`Foo`的子类。嵌套拓展只是说明`bar`被声明在`Bar`中而已，它只是一个静态成员。**
+
+一个常见的方式是在拓展的字段类型中定义拓展。比如，以下是在`Bar`类型定义的一个拓展`Foo`:
+
+```protobuf
+message Baz {
+  extend Foo {
+    optional Baz foo_ext = 127;
+  }
+  ...
+}
+```
+
+上述代码并不意味着你一定要在该类型中定义具有消息类型的拓展。我们也可以这么做：
+
+```protobuf
+message Baz {
+  ...
+}
+
+// This can even be in a different file.
+extend Foo {
+  optional Baz foo_baz_ext = 127;
+}
+```
+
+通常来讲，为了避免混淆，我们更推荐上面这种写法。因为总有许多不理解nested extensions的程序员将拓展当做另一个消息的子类。
+
+### 选择拓展数字
+
+和字段的数字标签一样，拓展的数字值也非常重要，这是为了避免两个用户添加同名拓展。如果拓展被解码为错误类型，就有可能导致数据损坏。所以通常来讲，我们在使用拓展前，会约定一个规则，以避免这种情况发生。
+
+通过`max`关键字，可以指定拓展的最大数字值。
+
+```protobuf
+message Foo {
+  extensions 1000 to max;
+}
+```
+
+`max`可以是2^29 - 1, 也就是 536,870,911。
+
+正如标签值选取规则一样，拓展数字也需要避免使用19000到19999的值。(从`FieldDescriptor::kFirstReservedNumber` 到`FieldDescriptor::kLastReservedNumber`)，这些保留值用于Protocol Buffers的实现。虽然你可以定义一个包括此范围内数字的拓展，但是protobuf编译器却禁止你使用它。
